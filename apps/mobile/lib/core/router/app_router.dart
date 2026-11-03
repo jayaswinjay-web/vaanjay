@@ -17,6 +17,7 @@ import '../../features/home/presentation/home_screen.dart';
 import '../../features/notifications/presentation/notification_screen.dart';
 import '../../features/profile/presentation/edit_profile_screen.dart';
 import '../../features/profile/presentation/other_user_profile_screen.dart';
+import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/settings/presentation/language_select_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/vibez/presentation/live_screen.dart';
@@ -46,7 +47,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       final auth = ref.read(authProvider);
       final location = state.matchedLocation;
 
-      if (auth.loading) {
+      if (auth.initializing) {
         return location == RoutePaths.splash ? null : RoutePaths.splash;
       }
       if (auth.loggedIn) {
@@ -86,7 +87,9 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: RoutePaths.otpVerify,
-        builder: (context, state) => const OTPVerifyScreen(),
+        builder: (context, state) => OTPVerifyScreen(
+          phone: state.uri.queryParameters['phone'] ?? '',
+        ),
       ),
       GoRoute(
         path: RoutePaths.forgotPassword,
@@ -139,6 +142,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
 
       // Pushed on top of the tabs
+      GoRoute(
+        path: RoutePaths.profile,
+        builder: (context, state) => const ProfileScreen(),
+      ),
       GoRoute(
         path: RoutePaths.chat,
         builder: (context, state) => const ChatScreen(),

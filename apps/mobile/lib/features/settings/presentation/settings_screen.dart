@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimens.dart';
+import '../../../core/widgets/back_link.dart';
 import '../../../core/widgets/screen_header.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../widgets/section_label.dart';
@@ -61,16 +63,18 @@ class SettingsScreen extends ConsumerWidget {
         top: false,
         child: Column(
           children: [
-            const ScreenHeader(
-              title: Text(
+            ScreenHeader(
+              centerTitle: true,
+              leading: BackLink(onTap: () => context.pop()),
+              title: const Text(
                 'Settings',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   color: AppColors.title,
-                  fontSize: 28,
+                  fontSize: 20,
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              paddingBottom: AppDimens.contentPadding,
             ),
             Expanded(
               child: ListView(
@@ -79,11 +83,9 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 children: [
                   for (final section in _sections) ...[
-                    _Section(
-                      section: section,
-                      onTap: () {},
-                    ),
+                    _Section(section: section, onTap: () {}),
                   ],
+                  const SizedBox(height: AppDimens.contentPadding),
                   GestureDetector(
                     onTap: () => ref.read(authProvider.notifier).signOut(),
                     child: Container(
@@ -91,8 +93,9 @@ class SettingsScreen extends ConsumerWidget {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: AppColors.errorBackground,
-                        borderRadius:
-                            BorderRadius.circular(AppDimens.cardRadius),
+                        borderRadius: BorderRadius.circular(
+                          AppDimens.cardRadius,
+                        ),
                         border: Border.all(color: AppColors.errorBorder),
                       ),
                       child: const Text(
@@ -141,10 +144,7 @@ class _Section extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(
-              left: 4,
-              bottom: AppDimens.fieldGap,
-            ),
+            padding: const EdgeInsets.only(left: 4, bottom: AppDimens.fieldGap),
             child: SectionLabel(section.title),
           ),
           Container(
@@ -166,8 +166,7 @@ class _Section extends StatelessWidget {
                         ),
                         decoration: const BoxDecoration(
                           border: Border(
-                            bottom:
-                                BorderSide(color: AppColors.borderSubtle),
+                            bottom: BorderSide(color: AppColors.borderSubtle),
                           ),
                         ),
                         child: Row(
